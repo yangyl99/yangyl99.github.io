@@ -13,6 +13,31 @@ body {
 	margin-left: 24px;
 }
 
+.publication-links {
+	line-height: 1.2;
+	min-width: 54rem;
+}
+
+.publication-links .publication-block {
+	float: none;
+	list-style: none;
+	text-align: right;
+}
+
+.publication-links .publication-link {
+	color: rgba(0, 0, 0, 0.3);
+	display: block;
+	font-size: 0.82rem;
+	padding-bottom: 0.15rem;
+	padding-top: 0.15rem;
+	white-space: nowrap;
+}
+
+.publication-links .publication-link:focus,
+.publication-links .publication-link:hover {
+	color: rgba(0, 0, 0, 0.6);
+}
+
 .container-fluid {
   margin-top: 1rem;
   padding-top: 6rem;
