@@ -1,0 +1,16 @@
+band,kind,spin,index,energy_keV,upper,lower,be2_energy_down_WU
+band1,level,0,1,0.000000,,,
+band1,level,2,1,339.022000,,,
+band1,level,4,1,853.384000,,,
+band1,level,6,1,1428.212000,,,
+band1,transition,,,,2_1,0_1,77.751448
+band1,transition,,,,4_1,2_1,132.119306
+band1,transition,,,,6_1,4_1,218.934801
+band2,level,0,2,678.680000,,,
+band3,level,2,2,664.912000,,,
+band3,level,3,1,1247.476000,,,
+band3,transition,,,,3_1,2_2,76.583282
+interband,transition,,,,2_2,0_1,7.156666
+interband,transition,,,,2_2,2_1,121.541881
+interband,transition,,,,0_2,2_2,528.660708
+interband,transition,,,,0_2,2_1,39.969263

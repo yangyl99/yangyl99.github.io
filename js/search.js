@@ -1,3 +1,5 @@
+var currentResultView = "ground";
+
 function findPos(el) {
     var x = y = 0;
     if(el.offsetParent) {
@@ -91,6 +93,11 @@ function clientProperty(){
   zNum=2*parseInt(0.238*(415.-yReturn/currHeight*513.)/2+4);
   nNum=2*parseInt(0.239*(xReturn/currWidth*1309. -131.)/2+3);
   aNum=nNum+zNum;
+  var div1 = document.getElementById('result');
+  div1.innerHTML = "<div class='row'>Click on a nuclide below</div>";
+  if ((xReturn<=0) || (yReturn<=0) || (zNum>104) || (zNum<8) || (!drip[zNum])) {
+  return;
+  }
   d1=nNum-drip[zNum][1]+1;
   d2=nNum-drip[zNum][2]-1;
   d3=zNum%2-1;
@@ -98,8 +105,6 @@ function clientProperty(){
   flag=d1*d2*d3*d4;
   if (flag>0) flag=1;
   if (flag<=0) flag=-1;
-  var div1 = document.getElementById('result');
-  div1.innerHTML = "<div class='row'>Click on a nuclide below</div>";
   if ((xReturn>0) && (yReturn>0) && (flag<0) && (zNum<=104) && (zNum>=8)) {
   div1.innerHTML = "<div class='row'><sup><sup>"+aNum+"</sup></sup>"+elementSymbol[zNum]+' (Z='+zNum+', N='+nNum+')'+"</div>";
   }
@@ -176,6 +181,8 @@ if (flag==-1) {
 	
 	div6 = document.getElementById('gamma');
 	div6.innerHTML = "<h5>&gamma; = "+obs[1]+"<sup>o</sup></h5>";
+	
+	updateSpectroscopyResult(iz, jn, elementSymbol);
 	  }
 }
 return m;
@@ -376,6 +383,8 @@ function linkZN(cZ, cN){
 	
 	div6 = document.getElementById('gamma');
 	div6.innerHTML = "<h5>&gamma; = "+obs[1]+"<sup>o</sup></h5>";
+	
+	updateSpectroscopyResult(iz, jn, elementSymbol);
   }
   
   return m;
@@ -406,6 +415,67 @@ function saveFig(a) {
 	var m = name + ".pdf"
 	return m
  
+}
+
+function setResultView(view) {
+	currentResultView = (view == "spectroscopy") ? "spectroscopy" : "ground";
+	var resultPanel = document.getElementById('result_panel');
+	var groundView = document.getElementById('ground_result_view');
+	var groundTitle = document.getElementById('ground_result_title');
+	var groundPropertiesPanel = document.getElementById('ground_properties_panel');
+	var spectroscopyView = document.getElementById('spectroscopy_result_view');
+	var spectroscopyTitle = document.getElementById('spectroscopy_result_title');
+	var groundButton = document.getElementById('ground_result_button');
+	var spectroscopyButton = document.getElementById('spectroscopy_result_button');
+	if (!resultPanel || !groundView || !groundTitle || !groundPropertiesPanel || !spectroscopyView || !spectroscopyTitle || !groundButton || !spectroscopyButton) {
+		return;
+	}
+	if (currentResultView == "spectroscopy") {
+		resultPanel.className = "col-lg-7";
+		groundView.style.display = "none";
+		groundTitle.style.display = "none";
+		groundPropertiesPanel.style.display = "none";
+		spectroscopyView.style.display = "";
+		spectroscopyTitle.style.display = "";
+		groundButton.className = "btn btn-default";
+		spectroscopyButton.className = "btn btn-primary active";
+	}
+	else {
+		resultPanel.className = "col-lg-5";
+		groundView.style.display = "";
+		groundTitle.style.display = "";
+		groundPropertiesPanel.style.display = "";
+		spectroscopyView.style.display = "none";
+		spectroscopyTitle.style.display = "none";
+		groundButton.className = "btn btn-primary active";
+		spectroscopyButton.className = "btn btn-default";
+	}
+}
+
+function updateSpectroscopyResult(iz, jn, elementSymbol) {
+	var aNum = parseInt(iz) + parseInt(jn);
+	var key = elementSymbol[parseInt(iz)] + aNum;
+	var title = document.getElementById('spectroscopy_title');
+	var status = document.getElementById('spectroscopy_status');
+	var imageRow = document.getElementById('spectroscopy_image_row');
+	var image = document.getElementById('spectroscopy_image');
+	if (!title || !status || !imageRow || !image) {
+		return;
+	}
+	title.innerText = "Spectroscopy for " + key;
+	var results = window.GBH_RESULTS || {};
+	var result = results[key];
+	if (!result) {
+		status.innerHTML = "<div class='alert alert-warning' role='alert'><h5>Spectroscopy result is not available for " + key + ".</h5></div>";
+		imageRow.style.display = "none";
+		setResultView(currentResultView);
+		return;
+	}
+	status.innerHTML = "";
+	image.src = result.image;
+	image.alt = key + " excitation bands";
+	imageRow.style.display = "";
+	setResultView(currentResultView);
 }
   
   
